@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using Terminal.Gui;
+using App.Views;
 
 class FileExplorer {
     static string cwd = Directory.GetCurrentDirectory();
@@ -13,6 +14,7 @@ class FileExplorer {
     static List<string> entries = new List<string>();
 
     public static TableView tableView { get; private set; }
+    public static FileTableView fileTableView;
 
     static void Main() {
         Application.Init();
@@ -50,10 +52,20 @@ class FileExplorer {
             FullRowSelect = true,
         };
 
+        fileTableView = new FileTableView()
+        {
+            X = 0,
+            Y = 0,
+            Width = Dim.Fill(),
+            Height = Dim.Fill(),
+            FullRowSelect = true,
+        };
+
+        fileTableView.InitData();
+        fileTableView.ScanCurrentDir();
 
 
-
-        win.Add(tableView);
+        win.Add(fileTableView);
 
         /*
         listView = new ListView(entries) {
