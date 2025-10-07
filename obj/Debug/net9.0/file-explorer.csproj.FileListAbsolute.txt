@@ -22,3 +22,4 @@ C:\Users\vegas0250\Desktop\q\file-explorer\obj\Debug\net9.0\refint\file-explorer
 C:\Users\vegas0250\Desktop\q\file-explorer\obj\Debug\net9.0\file-explorer.pdb
 C:\Users\vegas0250\Desktop\q\file-explorer\obj\Debug\net9.0\file-explorer.genruntimeconfig.cache
 C:\Users\vegas0250\Desktop\q\file-explorer\obj\Debug\net9.0\ref\file-explorer.dll
+C:\Users\vegas0250\Desktop\q\file-explorer\obj\Debug\net9.0\file-explorer.sourcelink.json

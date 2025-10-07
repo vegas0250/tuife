@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Collections.Generic;
+using System.Data;
 using System.Diagnostics;
 using Terminal.Gui;
 
@@ -11,6 +12,8 @@ class FileExplorer {
     static Label pathLabel = null!;
     static List<string> entries = new List<string>();
 
+    public static TableView tableView { get; private set; }
+
     static void Main() {
         Application.Init();
         var top = Application.Top;
@@ -19,7 +22,7 @@ class FileExplorer {
             X = 0,
             Y = 1, // leave row for menu/status
             Width = Dim.Fill(),
-            Height = Dim.Fill() - 1
+            Height = Dim.Fill() - 5
         };
 
         pathLabel = new Label(cwd) { X = 0, Y = 0, Width = Dim.Fill() };
@@ -27,6 +30,32 @@ class FileExplorer {
 
         entries = GetEntries(cwd).ToList();
 
+        var table = new DataTable();
+        table.Columns.Add("Name", typeof(string));
+        table.Columns.Add("Type", typeof(string));
+        table.Columns.Add("Size", typeof(long));
+        table.Columns.Add("Permissions", typeof(string));
+
+        // Добавляем строки
+        table.Rows.Add("readme.txt", ".txt", 1024, "rw-r--r--");
+        table.Rows.Add("Program.cs", ".cs", 2048, "rw-r--r--");
+
+        tableView = new TableView()
+        {
+            X = 0,
+            Y = 0,
+            Width = Dim.Fill(),
+            Height = Dim.Fill(),
+            Table = table,
+            FullRowSelect = true,
+        };
+
+
+
+
+        win.Add(tableView);
+
+        /*
         listView = new ListView(entries) {
             X = 0,
             Y = 0,
@@ -35,6 +64,7 @@ class FileExplorer {
         };
 
         win.Add(listView);
+        */
 
         // Instructions at bottom
         var help = new Label("hjkl — j:down k:up l:open h:up-dir  Enter:open  q:quit  r:refresh") {
@@ -46,7 +76,7 @@ class FileExplorer {
 
         var debug = new Label("Hello") {
           X = 0,
-          Y = Pos.Bottom(win),
+          Y = Pos.Bottom(win)+1,
           Width = Dim.Fill()
         };
         top.Add(debug);
@@ -57,39 +87,54 @@ class FileExplorer {
             var key = e.KeyEvent.Key;
             var rune = e.KeyEvent.KeyValue;
 
-            if (key == Key.J || rune == 'j') {
-                Move(1);
+            if (key == Key.J || rune == 'j')
+            {
+                //Move(1);
                 e.Handled = true;
                 debug.Text = "j";
-            } else if (key == Key.K || rune == 'k') {
-                Move(-1);
+                
+                tableView.Table.Rows.Add("Program.cs", ".cs", 2048, "rw-r--r--");
+            }
+            else if (key == Key.K || rune == 'k')
+            {
+                //Move(-1);
                 e.Handled = true;
                 debug.Text = "k";
-            } else if (key == Key.L || rune == 'l' || key == Key.Enter) {
-                OpenSelected();
+            }
+            else if (key == Key.L || rune == 'l' || key == Key.Enter)
+            {
+                //OpenSelected();
                 e.Handled = true;
                 debug.Text = "l";
-            } else if (key == Key.H || rune == 'h') {
-                GoUp();
+            }
+            else if (key == Key.H || rune == 'h')
+            {
+                //GoUp();
                 e.Handled = true;
                 debug.Text = "h";
-            } else if (rune == 'q') {
+            }
+            else if (rune == 'q')
+            {
                 Application.RequestStop();
                 e.Handled = true;
-            } else if (rune == 'r') {
-                Refresh();
+            }
+            else if (rune == 'r')
+            {
+                // Refresh();
                 e.Handled = true;
             }
         };
 
         // Double-click or Enter on ListView
+        /*
         listView.OpenSelectedItem += (args) => {
             OpenSelected();
         };
+        */
 
         // Initial focus
         top.Add(win);
-        listView.SetFocus();
+        // listView.SetFocus();
 
         Application.Run();
         Application.Shutdown();
